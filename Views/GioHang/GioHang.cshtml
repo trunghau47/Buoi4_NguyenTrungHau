@@ -31,7 +31,7 @@
             {
                 <td>@String.Format("{0:0,0}", item.giaban) VNĐ</td>
                 
-                <td><input type="number" min="1"  name="txtSoLg" value="@item.iSoluong" /></td>
+                <td><input type="number" min="1" name="txtSoLg" value="@item.iSoluong" /></td>
                 <td>@Html.DisplayFor(modelItem => item.dThanhtien)</td>
                 <td>
                     <a href="@Url.Action("Detail","Sach", new { @id = item.masach })">Chi Tiết</a>
@@ -52,20 +52,7 @@
         </td>
     </tr>
     <tr style="font-weight:bold; color:yellow; text-align:right">
-        <td colspan="5">           
-            @Html.ActionLink("Thanh Toán", "DatHang", "GioHang",
-                 new { onclick = "javascript:buyNow2()" })
-                   
+        <td colspan="5">
+            @Html.ActionLink("Đặt Hàng", "DatHang", "GioHang")
         </td>
 </table>
-<script type="text/javascript">
-    function buyNow2(){
-        question = confirm("Bạn muốn thanh toán những sản phẩm này?");
-        if (question != false) {
-            
-        alert('Cảm ơn bạn thanh toán sản phẩm')
-        }
-    }
-</script>
-
-

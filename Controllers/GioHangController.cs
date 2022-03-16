@@ -121,8 +121,6 @@ namespace Buoi4_NguyenTrungHau.Controllers
             return RedirectToAction("GioHang");
         }
 
-
-
         public ActionResult XoaTatCaGioHang()
         {
             List<GioHang> lstGiohang = Laygiohang();
@@ -138,6 +136,8 @@ namespace Buoi4_NguyenTrungHau.Controllers
                 sach.soluongton -= item.iSoluong;
             }
             data.SubmitChanges();
+            Session["Message"] = "Đặt Hàng Thành Công";
+            Session["AlertStatus"] = "Success";
             list.Clear();
             return RedirectToAction("GioHang");
         }
