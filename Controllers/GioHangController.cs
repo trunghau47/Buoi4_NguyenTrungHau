@@ -110,6 +110,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             {
                 if(sanpham.iSoluong > sach.soluongton)
                 {
+                    
                     ViewData["Error"] = "So Luong Mua Qua Lon!";
                 }
                 else
@@ -136,8 +137,6 @@ namespace Buoi4_NguyenTrungHau.Controllers
                 sach.soluongton -= item.iSoluong;
             }
             data.SubmitChanges();
-            Session["Message"] = "Đặt Hàng Thành Công";
-            Session["Status"] = "Success";
             list.Clear();
             return RedirectToAction("GioHang");
         }

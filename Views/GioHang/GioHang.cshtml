@@ -50,7 +50,19 @@
         </td>
     </tr>
     <tr style="font-weight:bold; color:yellow; text-align:right">
-        <td colspan="5">
-            @Html.ActionLink("Đặt Hàng", "Dathang", "GioHang")
+        <td colspan="5">           
+            @Html.ActionLink("Thanh Toán1", "DatHang", "GioHang",
+                 new { onclick = "javascript:buyNow2()" })
+                   
         </td>
 </table>
+<script type="text/javascript">
+    function buyNow2(){
+        question = confirm("Bạn muốn thanh toán những sản phẩm này?");
+        if (question != false) {
+            
+        alert('Cảm ơn bạn thanh toán sản phẩm')
+        }
+    }
+</script>
+
