@@ -126,5 +126,20 @@ namespace Buoi4_NguyenTrungHau.Controllers
             lstGiohang.Clear();
             return RedirectToAction("GioHang");
         }
+
+        public ActionResult DatHang()
+        {
+            List<GioHang> list = Laygiohang();
+            foreach(var item in list)
+            {
+                var sach = data.Saches.FirstOrDefault(m => m.masach == item.masach);
+                sach.soluongton -= item.iSoluong;
+            }
+            data.SubmitChanges();
+            Session["Message"] = "Đặt Hàng Thành Công";
+            Session["Status"] = "Success";
+            list.Clear();
+            return RedirectToAction("GioHang");
+        }
     }
 }
