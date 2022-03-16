@@ -77,7 +77,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             ViewBag.Tongsoluong = TongSoLuong();
             ViewBag.Tongtien = TongTien();
             ViewBag.Tongsoluongsanpham = ToSoLuongSanPham();
-            ViewData["Error"] = "So Luong Mua Qua Lon!";
+            ViewBag.ErrorMessage ="";
             return View(lstGioHang);
         }
 
@@ -86,7 +86,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             ViewBag.Tongsoluong = TongSoLuong();
             ViewBag.Tongtien = TongTien();
             ViewBag.Tongsoluongsanpham = ToSoLuongSanPham();
-            ViewData["Error"] = "So Luong Mua Qua Lon!";
+            //ViewData["Error"] = "So Luong Mua Qua Lon!";
             return PartialView();
         }
 
@@ -110,7 +110,8 @@ namespace Buoi4_NguyenTrungHau.Controllers
             {
                 if(sanpham.iSoluong > sach.soluongton)
                 {
-                    ViewData["Error"] = "So Luong Mua Qua Lon!";
+                    ViewBag.ErrorMessage = "Số Lượng Nhập Quá Lớn";
+                    return RedirectToAction("GioHang");
                 }
                 else
                 {
@@ -124,6 +125,20 @@ namespace Buoi4_NguyenTrungHau.Controllers
         {
             List<GioHang> lstGiohang = Laygiohang();
             lstGiohang.Clear();
+            return RedirectToAction("GioHang");
+        }
+        public ActionResult DatHang()
+        {
+            List<GioHang> list = Laygiohang();
+            foreach(var item in list)
+            {
+                var sach = data.Saches.FirstOrDefault(m => m.masach == item.masach);
+                sach.soluongton -= item.iSoluong;
+            }
+            data.SubmitChanges();
+            Session["Message"] = "Đặt Hàng Thành Công";
+            Session["AlertStatus"] = "Success";
+            list.Clear();
             return RedirectToAction("GioHang");
         }
     }

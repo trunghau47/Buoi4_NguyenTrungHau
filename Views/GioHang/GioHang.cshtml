@@ -6,10 +6,11 @@
 }
 
 <h2>GioHang</h2>
-
+<p>@ViewBag.ErrorMessage</p>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
 <table class="table">
     <tr>
         <th>@Html.DisplayNameFor(model => model.tensach) </th>
@@ -23,6 +24,7 @@
     @foreach (var item in Model)
     {
         <tr>
+            
             <td>@Html.DisplayFor(modelItem => item.tensach) </td>
             <td><img src="@item.hinh" width="180" /></td>
             @using (Html.BeginForm("CapNhapGioHang", "GioHang", new { @id = item.masach }))
@@ -51,6 +53,6 @@
     </tr>
     <tr style="font-weight:bold; color:yellow; text-align:right">
         <td colspan="5">
-            @Html.ActionLink("Đặt Hàng", "Dathang", "GioHang")
+            @Html.ActionLink("Đặt Hàng", "DatHang", "GioHang")
         </td>
 </table>
