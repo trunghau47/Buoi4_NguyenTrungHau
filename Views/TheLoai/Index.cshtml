@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<table class="table table-striped table-dark" border="1px">
+    <thead class="thead-dark">
+        <tr>
+            <th>Mã Thể Loại</th>
+            <th>Tên Thể Loại</th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@item.maloai</th>
+            <td>@item.tenloai</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.maloai }) |
+                @Html.ActionLink("Detail", "Detail", new { id = item.maloai }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.maloai })
+            </td>
+        </tr>
+    }
+</table>
+@Html.ActionLink("Create", "Create", "TheLoai")
+
