@@ -110,6 +110,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             {
                 if(sanpham.iSoluong > sach.soluongton)
                 {
+                    
                     ViewData["Error"] = "So Luong Mua Qua Lon!";
                 }
                 else
