@@ -1,0 +1,142 @@
+﻿@model Buoi4_NguyenTrungHau.Models.KhachHang
+
+@{
+    ViewBag.Title = "DangKy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Đăng Ký</h2>
+
+@using (Html.BeginForm("DangKy","NguoiDung",FormMethod.Post,new { id = "formInput", @class = "form-control" }))
+{
+    <div class="form-horizontal"> 
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.hoten, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.hoten, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.hoten, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.tendangnhap, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.tendangnhap, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.tendangnhap, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="MatKhauXacNhan">
+                Mật khẩu:
+            </label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line " type="password" name="matkhau" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="MatKhauXacNhan">
+                Mật khẩu xác nhận:
+            </label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line input-validation-error"
+                       data-val="true" data-val-required="Phải nhập mật khẩu xác nhận!"
+                       id="MatKhauXacNhan" name="MatKhauXacNhan" type="password" value="" aria-
+                       describedby="MatKhauXacNhan-error" aria-invalid="true">
+
+                @ViewData["NhapMKXN"]
+                @ViewData["MatKhauGiongNhau"]
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.diachi, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.diachi, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.diachi, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2" >
+                Số Điện Thoại:
+            </label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line " type="text" name="dienthoai" id="dienthoai" />
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ngaysinh, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ngaysinh, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ngaysinh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section scripts {
+    <script>
+        jQuery.validator.addMethod("phoneValidate", function (number, element) {
+            number = number.replace(/\s+/g, "");
+            return this.optional(element) || number.length > 9 &&
+                number.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
+        }, "Số Điện Thoại Bạn Nhập Không Đúng Vui L");
+
+        $(document).ready(function () {
+            $("#formInput").validate({
+                rules: {
+                    hoten: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email:true
+                    },
+                    dienthoai: {
+                        required: true,
+                        
+                        //phoneValidate: true
+                    }
+                },
+                messages: {
+                    hoten: {
+                        required: "Không được để trống"
+                    },
+                    dienthoai: {
+                        required: "Số ĐT Không Được Trống",      
+                        //phoneValidate: "SĐT Không Đúng"
+                    },
+                    email: {
+                        required: "Không được để trống",
+                        email:"Định email Dạng Sai"
+                    }
+                }
+            })
+        });
+    </script>
+}
+
+

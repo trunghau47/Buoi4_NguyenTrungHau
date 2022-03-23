@@ -23,6 +23,8 @@
                     <li>@Html.ActionLink("Thể Loại", "Index", "TheLoai")</li>
                     <li>@Html.ActionLink("Sách", "ListSach", "Sach")</li>
                     <li>@Html.Partial("~/Views/GioHang/GioHangPartial.cshtml")</li>
+                    <li>@Html.ActionLink("Đăng Ký","DangKy","NguoiDung")</li>
+                    <li>@Html.ActionLink("Đăng Nhập","DangNhap","NguoiDung")</li>
                 </ul>
             </div>
         </div>
@@ -37,6 +39,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/jquery.validate.min.js")
+    <script src="~/Scripts/jquery.validate.min.js"></script>
     @RenderSection("scripts", required: false)
     @RenderSection("upload", required: false)
 
