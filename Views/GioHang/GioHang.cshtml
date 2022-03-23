@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>GioHang</h2>
+<h2>Giỏ Hàng</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -41,7 +41,7 @@
     }
     <tr style="font-weight:bold; color:red; text-align:right">
         <td colspan="2">Số Loại Sách: @ViewBag.ToSoLuongSanPham</td>
-        <td colspan="2">Số Lượng Sách: @ViewBag.TongSoLuong</td>
+        <td colspan="3">Số Lượng Sách: @ViewBag.TongSoLuong</td>
         <td colspan="4">Tổng Tiền: @String.Format("{0:0,0}", @ViewBag.TongTien) VNĐ</td>
     </tr>
     <tr style="font-weight:bold; color:blue; text-align:right">
@@ -51,8 +51,8 @@
     </tr>
     <tr style="font-weight:bold; color:yellow; text-align:right">
         <td colspan="5">           
-            @Html.ActionLink("Thanh Toán1", "DatHang", "GioHang",
-                 new { onclick = "javascript:buyNow2()" })
+            @Html.ActionLink("Đặt Hàng", "DatHang", "GioHang")
+                 
                    
         </td>
 </table>

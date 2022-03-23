@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -77,7 +79,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             ViewBag.Tongsoluong = TongSoLuong();
             ViewBag.Tongtien = TongTien();
             ViewBag.Tongsoluongsanpham = ToSoLuongSanPham();
-            ViewData["Error"] = "So Luong Mua Qua Lon!";
+            ViewBag.Employee = "";
             return View(lstGioHang);
         }
 
@@ -86,7 +88,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             ViewBag.Tongsoluong = TongSoLuong();
             ViewBag.Tongtien = TongTien();
             ViewBag.Tongsoluongsanpham = ToSoLuongSanPham();
-            ViewData["Error"] = "So Luong Mua Qua Lon!";
+           // ViewData["Error"] = "So Luong Mua Qua Lon!";
             return PartialView();
         }
 
@@ -108,10 +110,10 @@ namespace Buoi4_NguyenTrungHau.Controllers
             GioHang sanpham = lstGiohang.SingleOrDefault(n => n.masach == id);
             if (sanpham != null)
             {
-                if(sanpham.iSoluong > sach.soluongton)
+                if(int.Parse(collection["txtSolg"].ToString()) > sach.soluongton)
                 {
-                    
-                    ViewData["Error"] = "So Luong Mua Qua Lon!";
+
+                    ViewBag.Employee = "Sai Rồi";
                 }
                 else
                 {
@@ -128,17 +130,154 @@ namespace Buoi4_NguyenTrungHau.Controllers
             return RedirectToAction("GioHang");
         }
 
+        //public ActionResult DatHang()
+        //{
+        //    List<GioHang> list = Laygiohang();
+        //    foreach(var item in list)
+        //    {
+        //        var sach = data.Saches.FirstOrDefault(m => m.masach == item.masach);
+        //        sach.soluongton -= item.iSoluong;
+        //    }
+        //    data.SubmitChanges();
+        //    list.Clear();
+        //    return RedirectToAction("GioHang");
+        //}
+        [HttpGet]
         public ActionResult DatHang()
         {
-            List<GioHang> list = Laygiohang();
-            foreach(var item in list)
+            if(Session["TaiKhoan"]== null || Session["TaiKhoan"].ToString()=="")
             {
-                var sach = data.Saches.FirstOrDefault(m => m.masach == item.masach);
-                sach.soluongton -= item.iSoluong;
+                return RedirectToAction("DangNhap", "NguoiDung");
+            }
+            if(Session["GioHang"]==null)
+            {
+                return RedirectToAction("Index", "Sach");
+            }
+            List<GioHang> lstGioHang = Laygiohang();
+            ViewBag.Tongsoluong = TongSoLuong();
+            ViewBag.Tongtien = TongTien();
+            ViewBag.Tongsoluongsanpham = ToSoLuongSanPham();
+            return View(lstGioHang);
+        }
+        public ActionResult DatHang(FormCollection collection)
+        {
+            DonHang dh = new DonHang();
+            KhachHang kh = (KhachHang)Session["TaiKhoan"];
+            Sach s = new Sach();
+            List<GioHang> gh = Laygiohang();
+            var ngaygiao = String.Format("{0:MM/dd/yyyy}", collection["NgayGiao"]);
+            //if (DateTime.Parse(ngaygiao) < DateTime.Now)
+            //{
+            //    ViewData["Date"] = "Ngày giao phải lớn hơn ngày hiện tại!";
+            //} 
+            //else
+            //{
+                
+            //}    
+            dh.makh = kh.makh;
+            dh.ngaydat = DateTime.Now;
+            dh.ngaygiao = DateTime.Parse(ngaygiao);
+            dh.giaohang = false;
+            dh.thanhtoan = false;
+            data.DonHangs.InsertOnSubmit(dh);
+            data.SubmitChanges();
+            foreach (var item in gh)
+            {
+                ChiTietDonHang ctdh = new ChiTietDonHang();
+                ctdh.madon = dh.madon;
+                ctdh.masach = item.masach;
+                ctdh.soluong = item.iSoluong;
+                s = data.Saches.Single(n => n.masach == item.masach);
+                s.soluongton -= ctdh.soluong;
+                data.SubmitChanges();
+                data.ChiTietDonHangs.InsertOnSubmit(ctdh);
+                try
+                {
+                    if (ModelState.IsValid)
+                    {
+                        
+                        var senderEmail = new MailAddress("haunguyenaaaa6@gmail.com", "Cửa Hàng Sách Hutech");
+                        var receiverEmail = new MailAddress(kh.email, "Receiver");
+                        var password = "hau121pk";
+                        var sub = "Xác Nhận Mua Hàng Thành Công";
+                        var body = "Đơn hàng " + ctdh.madon + " đang được giao đến bạn \nCảm ơn bạn";
+                        var smtp = new SmtpClient
+                        {
+                            Host = "smtp.gmail.com",
+                            Port = 587,
+                            EnableSsl = true,
+                            DeliveryMethod = SmtpDeliveryMethod.Network,
+                            UseDefaultCredentials = false,
+                            Credentials = new NetworkCredential(senderEmail.Address, password)
+                        };
+                        using (var mess = new MailMessage(senderEmail, receiverEmail)
+                        {
+                            Subject = sub,
+                            Body = body
+                        })
+                        {
+                            smtp.Send(mess);
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return HttpNotFound();
+                }
             }
             data.SubmitChanges();
-            list.Clear();
-            return RedirectToAction("GioHang");
+            Session["GioHang"] = null;
+            
+            return RedirectToAction("XacNhanDonHang","GioHang");
         }
+        public ActionResult XacNhanDonHang()
+        {
+            return View();
+        }
+
+        //public ActionResult SendMail()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public ActionResult SendMail(KhachHang receiver, string subject, string message)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            var senderEmail = new MailAddress("haunguyenaa6@gmail.com", "Nguyen Trung Hau");
+        //            var receiverEmail = new MailAddress(receiver.email, "Receiver");
+        //            var password = "hau121pk";
+        //            var sub = "Xác Nhận Mua Hàng Thành Công";
+        //            var body ="Đơn hàng của bạn đang được giao đến bạn \n Cảm ơn bạn";
+        //            var smtp = new SmtpClient
+        //            {
+        //                Host = "smtp.gmail.com",
+        //                Port = 587,
+        //                EnableSsl = true,
+        //                DeliveryMethod = SmtpDeliveryMethod.Network,
+        //                UseDefaultCredentials = false,
+        //                Credentials = new NetworkCredential(senderEmail.Address, password)
+        //            };
+        //            using (var mess = new MailMessage(senderEmail, receiverEmail)
+        //            {
+        //                Subject = sub,
+        //                Body = body
+        //            })
+        //            {
+        //                smtp.Send(mess);
+        //            }
+                   
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return RedirectToAction("XacNhanGioHang");
+        //}
+
     }
 }
