@@ -80,6 +80,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             ViewBag.Tongtien = TongTien();
             ViewBag.Tongsoluongsanpham = ToSoLuongSanPham();
             ViewBag.Employee = "";
+
             return View(lstGioHang);
         }
 
@@ -88,7 +89,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
             ViewBag.Tongsoluong = TongSoLuong();
             ViewBag.Tongtien = TongTien();
             ViewBag.Tongsoluongsanpham = ToSoLuongSanPham();
-           // ViewData["Error"] = "So Luong Mua Qua Lon!";
+
             return PartialView();
         }
 
@@ -114,6 +115,10 @@ namespace Buoi4_NguyenTrungHau.Controllers
                 {
 
                     ViewBag.Employee = "Sai Rồi";
+
+                    ViewBag.ErrorMessage = "Số Lượng Nhập Quá Lớn";
+                    return RedirectToAction("GioHang");
+
                 }
                 else
                 {
@@ -122,6 +127,8 @@ namespace Buoi4_NguyenTrungHau.Controllers
             }
             return RedirectToAction("GioHang");
         }
+
+
 
         public ActionResult XoaTatCaGioHang()
         {
@@ -143,6 +150,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
         //    return RedirectToAction("GioHang");
         //}
         [HttpGet]
+
         public ActionResult DatHang()
         {
             if(Session["TaiKhoan"]== null || Session["TaiKhoan"].ToString()=="")
@@ -198,7 +206,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
                         
                         var senderEmail = new MailAddress("haunguyenaaaa6@gmail.com", "Cửa Hàng Sách Hutech");
                         var receiverEmail = new MailAddress(kh.email, "Receiver");
-                        var password = "hau121pk";
+                        var password = "";
                         var sub = "Xác Nhận Mua Hàng Thành Công";
                         var body = "Đơn hàng " + ctdh.madon + " đang được giao đến bạn \nCảm ơn bạn";
                         var smtp = new SmtpClient
