@@ -206,7 +206,7 @@ namespace Buoi4_NguyenTrungHau.Controllers
                         
                         var senderEmail = new MailAddress("haunguyenaaaa6@gmail.com", "Cửa Hàng Sách Hutech");
                         var receiverEmail = new MailAddress(kh.email, "Receiver");
-                        var password = "hau121pk";
+                        var password = "";
                         var sub = "Xác Nhận Mua Hàng Thành Công";
                         var body = "Đơn hàng " + ctdh.madon + " đang được giao đến bạn \nCảm ơn bạn";
                         var smtp = new SmtpClient
